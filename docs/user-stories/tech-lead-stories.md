@@ -213,7 +213,7 @@ The Tech Lead is responsible for defining system architecture, ensuring code qua
   - Automated deployment to staging on merge to main
   - Manual deployment approval for production
 - And pipelines run in under 10 minutes
-- And team receives notifications on failures
+- And the owner receives an actionable diagnosis failure status
 
 **Technical Notes**:
 

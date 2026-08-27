@@ -1,969 +1,416 @@
-# Epics and User Stories
+# Workspace Flow Epics & User Stories
 
-## Epic 1: User Authentication & Account Management
+## Estimation Convention
 
-**Priority**: Must Have (MVP)  
-**Effort**: 21 story points  
-**Owner**: Backend Engineer + Frontend Engineer
+Story points use a modified Fibonacci scale: 1 (trivial), 2 (small), 3 (moderate), 5 (complex), 8 (large), and 13 (needs decomposition). Estimates include implementation, tests, accessibility, and documentation.
 
-### User Stories
+## Epic 0: Product Foundation and Design System
 
-**US-1.1: User Registration**
+**Priority**: Must Have (Foundation)
+**Owner**: Tech Lead + UI/UX Engineer
+**Estimate**: 26 SP
 
-- **As a** new user,
-- **I want to** create an account with email and password,
-- **So that** I can start managing my tasks.
+### US-0.1: Define the Workspace Flow Domain (5 SP)
 
-**Acceptance Criteria**:
-
-- Given I am on the registration page
-- When I enter valid email, username, and password
-- Then my account is created and I receive a verification email
-- And I am redirected to the login page
-
-**Technical Notes**:
-
-- Implement password hashing with bcrypt (cost factor 12)
-- Validate email format and uniqueness
-- Password must be min 8 characters with complexity requirements
-- Send verification email via email service
-
-**Tasks**:
-
-1. Create User domain model and repository interface (Backend, 2 SP)
-2. Implement registration API endpoint (Backend, 3 SP)
-3. Create registration form component (Frontend, 2 SP)
-4. Implement form validation (Frontend, 1 SP)
-5. Connect form to API (Frontend, 1 SP)
-6. Write unit and integration tests (Backend + Frontend, 2 SP)
-
-**Dependencies**: None
-
----
-
-**US-1.2: User Login**
-
-- **As a** registered user,
-- **I want to** log in with my credentials,
-- **So that** I can access my tasks and projects.
+- **As a** product team,
+- **I want to** define projects, notes, decisions, tasks, sources, analysis runs, findings, and scores,
+- **So that** every feature uses the same product language.
 
 **Acceptance Criteria**:
 
-- Given I am on the login page
-- When I enter valid credentials
-- Then I receive a JWT token and am redirected to the dashboard
-- And my session persists until token expiration or logout
+- Domain glossary and relationships are documented
+- Ownership, traceability, consent, and read-only rules are explicit
+- API and database contracts are reviewed
 
-**Technical Notes**:
+### US-0.2: Align the Product with the Base Mockups (5 SP)
 
-- JWT token with 24-hour expiration
-- Implement refresh token mechanism
-- Store token securely in httpOnly cookie or localStorage (with security considerations)
-
-**Tasks**:
-
-1. Implement JWT authentication service (Backend, 3 SP)
-2. Create login API endpoint (Backend, 2 SP)
-3. Create login form component (Frontend, 2 SP)
-4. Implement authentication state management (Frontend, 2 SP)
-5. Create protected route wrapper (Frontend, 1 SP)
-6. Write tests for authentication flow (Backend + Frontend, 2 SP)
-
-**Dependencies**: US-1.1
-
----
-
-**US-1.3: Password Reset**
-
-- **As a** user who forgot my password,
-- **I want to** reset it via email,
-- **So that** I can regain access to my account.
+- **As a** UI/UX engineer,
+- **I want to** map the root `docs/*.png` mockups to MVP screens,
+- **So that** implementation preserves the intended navigation and flows.
 
 **Acceptance Criteria**:
 
-- Given I click "Forgot Password"
-- When I enter my email
-- Then I receive a password reset link
-- And I can set a new password using the link
+- Authentication, portfolio, project workspace, task, empty, and confirmation screens are mapped
+- Mobile and desktop states are documented
+- Memory, consent, and diagnosis extensions are annotated
 
-**Technical Notes**:
+### US-0.3: Establish Delivery Quality Gates (8 SP)
 
-- Reset token expires in 1 hour
-- Token should be single-use
-- Invalidate existing sessions after password reset
-
-**Tasks**:
-
-1. Implement password reset token generation (Backend, 2 SP)
-2. Create reset password API endpoints (Backend, 2 SP)
-3. Create forgot password form (Frontend, 1 SP)
-4. Create reset password form (Frontend, 1 SP)
-5. Write tests (Backend + Frontend, 2 SP)
-
-**Dependencies**: US-1.2
-
----
-
-**US-1.4: User Profile Management**
-
-- **As a** logged-in user,
-- **I want to** update my profile information,
-- **So that** I can keep my account details current.
+- **As a** tech lead,
+- **I want to** configure CI, migrations, linting, type checks, and test commands,
+- **So that** every increment is reproducible and reviewable.
 
 **Acceptance Criteria**:
 
-- Given I am on the profile settings page
-- When I update my username or email
-- Then my changes are saved
-- And I see a success confirmation
+- A new developer can start the system locally
+- CI fails on formatting, type, migration, or test errors
+- Coverage and acceptance evidence are attached to each completed story
 
-**Technical Notes**:
+### US-0.4: Define Privacy and Consent Contracts (8 SP)
 
-- Validate uniqueness of email and username
-- Require password confirmation for email changes
-- Re-send verification for new email addresses
+- **As a** developer,
+- **I want to** define source scope, consent, revocation, retention, and audit behavior,
+- **So that** source analysis is safe and explainable.
 
-**Tasks**:
+**Acceptance Criteria**:
 
-1. Create user profile update endpoint (Backend, 2 SP)
-2. Create profile settings component (Frontend, 2 SP)
-3. Implement profile update logic (Frontend, 1 SP)
-4. Write tests (Backend + Frontend, 1 SP)
+- Consent is explicit, timestamped, scoped, and revocable
+- External transmission is visible before it occurs
+- Agents cannot write to source files
 
-**Dependencies**: US-1.2
+## Epic 1: Identity and Private Ownership
 
----
+**Priority**: Must Have (MVP)
+**Estimate**: 21 SP
 
-### Epic 2: Project Management
+### US-1.1: Register and Sign In (8 SP)
 
-**Priority**: Must Have (MVP)  
-**Effort**: 13 story points  
-**Owner**: Backend Engineer + Frontend Engineer
+- **As a** developer,
+- **I want to** create an account and sign in securely,
+- **So that** my project memory is private.
 
-### User Stories
+**Acceptance Criteria**:
 
-**US-2.1: Create Project**
+- Invalid credentials produce actionable errors
+- Passwords are protected and sessions expire
+- Successful sign-in reaches the private portfolio
+
+### US-1.2: Enforce Project Ownership (8 SP)
 
 - **As a** user,
-- **I want to** create a new project,
-- **So that** I can organize my tasks by project.
+- **I want to** access only my projects and records,
+- **So that** another user cannot read my context or source results.
 
 **Acceptance Criteria**:
 
-- Given I am logged in
-- When I click "New Project" and enter a name and optional description
-- Then a new project is created
-- And I see it in my project list
+- Project, note, task, source, run, finding, and score queries enforce owner scope
+- Unauthorized resource access does not reveal whether the resource exists
+- Authorization tests cover every resource family
 
-**Technical Notes**:
-
-- Project name is required (max 100 characters)
-- Description is optional (max 500 characters)
-- Auto-generate color if not provided
-- Validate user ownership
-
-**Tasks**:
-
-1. Create Project domain model and repository (Backend, 2 SP)
-2. Implement create project API endpoint (Backend, 1 SP)
-3. Create project form modal component (Frontend, 2 SP)
-4. Connect form to API (Frontend, 1 SP)
-5. Write tests (Backend + Frontend, 1 SP)
-
-**Dependencies**: US-1.2 (authentication)
-
----
-
-**US-2.2: View Projects List**
+### US-1.3: Manage Account and Session States (5 SP)
 
 - **As a** user,
-- **I want to** see all my projects,
-- **So that** I can choose which project to work on.
+- **I want to** sign out and recover from an expired session,
+- **So that** access remains predictable.
 
 **Acceptance Criteria**:
 
-- Given I am logged in
-- When I navigate to the projects page
-- Then I see a list of all my projects with names and task counts
-- And I can click on a project to view its tasks
+- Sign-out clears client state
+- Expired sessions redirect to sign-in without losing saved memory
+- Account errors are represented in desktop and mobile layouts
 
-**Technical Notes**:
+## Epic 2: Project Workspace
 
-- Display projects with task count (aggregate query)
-- Sort by creation date (newest first) by default
-- Show archived projects separately
+**Priority**: Must Have (MVP)
+**Estimate**: 26 SP
 
-**Tasks**:
+### US-2.1: Create and Edit a Project (8 SP)
 
-1. Implement list projects API endpoint (Backend, 1 SP)
-2. Create projects list component (Frontend, 2 SP)
-3. Implement project navigation (Frontend, 1 SP)
-4. Write tests (Backend + Frontend, 1 SP)
-
-**Dependencies**: US-2.1
-
----
-
-**US-2.3: Update Project**
-
-- **As a** user,
-- **I want to** edit project details,
-- **So that** I can keep project information accurate.
+- **As a** developer,
+- **I want to** create a project with purpose and source information,
+- **So that** its context has a durable home.
 
 **Acceptance Criteria**:
 
-- Given I am viewing a project
-- When I click edit and change the name or description
-- Then the project is updated
-- And I see the updated information
+- Required fields are validated
+- The project appears in the portfolio after creation
+- Edit preserves existing memory and analysis history
 
-**Technical Notes**:
+### US-2.2: Browse the Project Portfolio (5 SP)
 
-- Validate ownership before allowing update
-- Optimistic UI updates for better UX
-
-**Tasks**:
-
-1. Implement update project API endpoint (Backend, 1 SP)
-2. Create project edit form (Frontend, 1 SP)
-3. Connect form to API (Frontend, 1 SP)
-4. Write tests (Backend + Frontend, 1 SP)
-
-**Dependencies**: US-2.2
-
----
-
-**US-2.4: Delete Project**
-
-- **As a** user,
-- **I want to** delete a project,
-- **So that** I can remove projects I no longer need.
+- **As a** developer,
+- **I want to** see all my projects with activity and health signals,
+- **So that** I can choose where to focus.
 
 **Acceptance Criteria**:
 
-- Given I am viewing a project
-- When I click delete and confirm
-- Then the project and all its tasks are deleted
-- And I am redirected to the projects list
+- Portfolio supports loading, empty, and failure states
+- Project cards show latest score, trend, open tasks, and recent activity
+- The layout follows the base dashboard and project-list mockups
 
-**Technical Notes**:
+### US-2.3: Open a Project Workspace (8 SP)
 
-- Show confirmation modal with warning about task deletion
-- Cascade delete all associated tasks
-- Consider soft delete for data recovery (future)
-
-**Tasks**:
-
-1. Implement delete project API endpoint (Backend, 1 SP)
-2. Create delete confirmation modal (Frontend, 1 SP)
-3. Connect delete action to API (Frontend, 0.5 SP)
-4. Write tests (Backend + Frontend, 0.5 SP)
-
-**Dependencies**: US-2.2
-
----
-
-### Epic 3: Task Management
-
-**Priority**: Must Have (MVP)  
-**Effort**: 21 story points  
-**Owner**: Backend Engineer + Frontend Engineer
-
-#### User Stories
-
-**US-3.1: Create Task**
-
-- **As a** user,
-- **I want to** create a task within a project,
-- **So that** I can track work items.
+- **As a** developer,
+- **I want to** see memory, contextual work, and diagnosis in one project view,
+- **So that** I can resume without reconstructing context.
 
 **Acceptance Criteria**:
 
-- Given I am viewing a project
-- When I click "Add Task" and enter a title
-- Then a new task is created with status "TODO"
-- And it appears in the task list
+- Project detail includes notes, decisions, tasks, latest score, and next action
+- Navigation preserves project identity
+- No single panel hides the current project status
 
-**Technical Notes**:
+### US-2.4: Archive or Delete a Project (5 SP)
 
-- Title is required (max 200 characters)
-- Description is optional (max 2000 characters)
-- Default status: TODO
-- Default priority: MEDIUM
-- Due date is optional
-
-**Tasks**:
-
-1. Create Task domain model and repository (Backend, 2 SP)
-2. Implement create task API endpoint (Backend, 2 SP)
-3. Create task form component (Frontend, 2 SP)
-4. Connect form to API (Frontend, 1 SP)
-5. Write tests (Backend + Frontend, 1 SP)
-
-**Dependencies**: US-2.1
-
----
-
-**US-3.2: View Tasks**
-
-- **As a** user,
-- **I want to** see all tasks in a project,
-- **So that** I can understand what needs to be done.
+- **As a** developer,
+- **I want to** archive or delete a project with confirmation,
+- **So that** obsolete work is controlled without accidental loss.
 
 **Acceptance Criteria**:
 
-- Given I am viewing a project
-- When the page loads
-- Then I see all tasks grouped by status (TODO, IN_PROGRESS, DONE)
-- And each task shows title, priority, and due date
+- Archive is reversible
+- Delete confirmation names the records affected
+- Deletion is authorized and cascades only within the project boundary
 
-**Technical Notes**:
+## Epic 3: Project Memory and AI Enrichment
 
-- Implement efficient querying with eager loading
-- Support filtering by status, priority
-- Return tasks in position order within each status
+**Priority**: Must Have (MVP)
+**Estimate**: 34 SP
 
-**Tasks**:
+### US-3.1: Capture a Note (5 SP)
 
-1. Implement list tasks API endpoint with filters (Backend, 2 SP)
-2. Create task list component (Frontend, 2 SP)
-3. Implement filtering UI (Frontend, 1 SP)
-4. Write tests (Backend + Frontend, 1 SP)
-
-**Dependencies**: US-3.1
-
----
-
-**US-3.3: Update Task Status**
-
-- **As a** user,
-- **I want to** change a task's status,
-- **So that** I can track progress.
+- **As a** developer,
+- **I want to** write a free-form note in seconds,
+- **So that** ideas are not lost.
 
 **Acceptance Criteria**:
 
-- Given I am viewing tasks
-- When I drag a task to a different status column
-- Then the task status is updated
-- And it appears in the new column
+- Note is saved as raw content before enrichment
+- Note is linked to the current project
+- Save, failure, and offline/error feedback are visible
 
-**Technical Notes**:
+### US-3.2: Classify a Note (8 SP)
 
-- Implement drag-and-drop with react-beautiful-dnd or similar
-- Update status via PATCH endpoint
-- Optimistic UI update for smooth UX
-
-**Tasks**:
-
-1. Implement update task API endpoint (Backend, 1 SP)
-2. Implement drag-and-drop functionality (Frontend, 3 SP)
-3. Connect drag action to API (Frontend, 1 SP)
-4. Write tests (Backend + Frontend, 1 SP)
-
-**Dependencies**: US-3.2
-
----
-
-**US-3.4: Update Task Details**
-
-- **As a** user,
-- **I want to** edit task information,
-- **So that** I can keep task details accurate.
+- **As a** developer,
+- **I want to** receive a proposed note type,
+- **So that** I do not need to structure every thought manually.
 
 **Acceptance Criteria**:
 
-- Given I click on a task
-- When I edit the title, description, priority, or due date
-- Then the task is updated
-- And I see the updated information
+- Context Classifier returns type and confidence
+- Provider failure leaves the raw note usable
+- No suggestion is applied without user action
 
-**Technical Notes**:
+### US-3.3: Accept, Edit, or Discard a Suggestion (8 SP)
 
-- Open task in modal or side panel
-- All fields are editable
-- Validate data before submission
-
-**Tasks**:
-
-1. Create task detail view component (Frontend, 2 SP)
-2. Implement task update logic (Frontend, 1 SP)
-3. Connect to update API (Frontend, 1 SP)
-4. Write tests (Frontend, 1 SP)
-
-**Dependencies**: US-3.3
-
----
-
-**US-3.5: Delete Task**
-
-- **As a** user,
-- **I want to** delete a task,
-- **So that** I can remove completed or unnecessary tasks.
+- **As a** developer,
+- **I want to** control AI-enriched content,
+- **So that** the project record reflects my intent.
 
 **Acceptance Criteria**:
 
-- Given I am viewing a task
-- When I click delete and confirm
-- Then the task is removed
-- And it no longer appears in the task list
+- Accept, edit, and discard are separate actions
+- Original note remains available
+- Decision and task suggestions have distinct fields
 
-**Technical Notes**:
+### US-3.4: Record an Architecture Decision (5 SP)
 
-- Show confirmation modal
-- Consider soft delete for undo capability (future)
-
-**Tasks**:
-
-1. Implement delete task API endpoint (Backend, 1 SP)
-2. Create delete button and confirmation (Frontend, 1 SP)
-3. Connect to API (Frontend, 0.5 SP)
-4. Write tests (Backend + Frontend, 0.5 SP)
-
-**Dependencies**: US-3.2
-
----
-
-### Epic 4: Dashboard & Visualization
-
-**Priority**: Must Have (MVP)  
-**Effort**: 13 story points  
-**Owner**: Frontend Engineer + Backend Engineer
-
-#### User Stories
-
-**US-4.1: Task Summary Dashboard**
-
-- **As a** user,
-- **I want to** see an overview of my tasks,
-- **So that** I can understand my workload at a glance.
+- **As a** developer,
+- **I want to** record rationale, alternatives, and consequences,
+- **So that** future diagnosis understands deliberate trade-offs.
 
 **Acceptance Criteria**:
 
-- Given I am logged in
-- When I navigate to the dashboard
-- Then I see counts of tasks by status (TODO, IN_PROGRESS, DONE)
-- And I see upcoming tasks (next 7 days)
-- And I see overdue tasks
+- Decision stores context, decision, alternatives, consequences, and date
+- Decision is searchable from the project workspace
+- Decision history is immutable after acceptance, with amendments traceable
 
-**Technical Notes**:
+### US-3.5: Review Project Memory (8 SP)
 
-- Implement efficient aggregate queries
-- Cache dashboard data with short TTL (5 minutes)
-- Display charts using recharts or similar library
-
-**Tasks**:
-
-1. Implement dashboard statistics API (Backend, 2 SP)
-2. Create dashboard layout component (Frontend, 2 SP)
-3. Create task summary cards (Frontend, 2 SP)
-4. Implement data fetching and state management (Frontend, 1 SP)
-5. Write tests (Backend + Frontend, 1 SP)
-
-**Dependencies**: US-3.2
-
----
-
-**US-4.2: Kanban Board View**
-
-- **As a** user,
-- **I want to** see tasks in a kanban board,
-- **So that** I can visualize workflow and move tasks easily.
+- **As a** developer,
+- **I want to** browse and filter notes and decisions,
+- **So that** I can recover the reasoning behind the code.
 
 **Acceptance Criteria**:
 
-- Given I am viewing a project
-- When I select kanban view
-- Then I see three columns: TODO, IN_PROGRESS, DONE
-- And I can drag tasks between columns
-- And task counts are shown in column headers
+- Memory is ordered by recency and filterable by type
+- Each entry shows origin, status, and related task if any
+- Empty and no-results states guide the next action
 
-**Technical Notes**:
+## Epic 4: Contextual Work
 
-- Use react-beautiful-dnd for drag-and-drop
-- Implement virtual scrolling for large task lists
-- Maintain task position within columns
+**Priority**: Must Have (MVP)
+**Estimate**: 26 SP
 
-**Tasks**:
+### US-4.1: Create a Task from a Note (8 SP)
 
-1. Create kanban board component (Frontend, 3 SP)
-2. Implement column rendering (Frontend, 1 SP)
-3. Integrate drag-and-drop (Frontend, 2 SP)
-4. Write tests (Frontend, 2 SP)
-
-**Dependencies**: US-3.3
-
----
-
-**US-4.3: Task Search**
-
-- **As a** user,
-- **I want to** search for tasks by title or description,
-- **So that** I can quickly find specific tasks.
+- **As a** developer,
+- **I want to** turn approved context into a task,
+- **So that** work keeps its rationale.
 
 **Acceptance Criteria**:
 
-- Given I am on the dashboard or project page
-- When I enter text in the search box
-- Then I see filtered results matching my query
-- And results are highlighted
+- Task stores `source_note_id`
+- Conversion is idempotent
+- User can edit title, description, priority, and status before saving
 
-**Technical Notes**:
+### US-4.2: Manage Task Status and Priority (8 SP)
 
-- Implement debounced search (300ms delay)
-- Use ILIKE queries for case-insensitive search
-- Consider full-text search for better performance (future)
-
-**Tasks**:
-
-1. Implement search API endpoint (Backend, 2 SP)
-2. Create search input component (Frontend, 1 SP)
-3. Implement search logic with debouncing (Frontend, 1 SP)
-4. Write tests (Backend + Frontend, 1 SP)
-
-**Dependencies**: US-3.2
-
----
-
-### Epic 5: Notifications System
-
-**Priority**: Should Have (Phase 1)  
-**Effort**: 21 story points  
-**Owner**: Backend Engineer + Frontend Engineer
-
-#### User Stories
-
-**US-5.1: Deadline Notifications**
-
-- **As a** user,
-- **I want to** receive notifications for upcoming task deadlines,
-- **So that** I don't miss important due dates.
+- **As a** developer,
+- **I want to** update task status and priority,
+- **So that** contextual work reflects reality.
 
 **Acceptance Criteria**:
 
-- Given I have a task due within 24 hours
-- When the system runs its notification check
-- Then I receive an in-app notification
-- And I receive an email notification (if enabled)
+- TODO, IN_PROGRESS, and DONE are persisted
+- Status changes work in list and kanban views
+- The source note remains discoverable
 
-**Technical Notes**:
+### US-4.3: Search and Filter Contextual Work (5 SP)
 
-- Implement background job (Celery or APScheduler)
-- Run notification check every hour
-- Create notification records in database
-- Send email via email service (SendGrid/AWS SES)
-
-**Tasks**:
-
-1. Create Notification domain model (Backend, 1 SP)
-2. Implement notification generation service (Backend, 3 SP)
-3. Implement scheduled job (Backend, 2 SP)
-4. Create email templates (Backend, 1 SP)
-5. Implement email sending (Backend, 2 SP)
-6. Write tests (Backend, 2 SP)
-
-**Dependencies**: US-3.1, US-1.2
-
----
-
-**US-5.2: In-App Notifications**
-
-- **As a** user,
-- **I want to** view notifications in the app,
-- **So that** I can stay informed without checking email.
+- **As a** developer,
+- **I want to** search and filter tasks,
+- **So that** I can find the next action quickly.
 
 **Acceptance Criteria**:
 
-- Given I have notifications
-- When I click the notification bell icon
-- Then I see a list of my notifications
-- And unread notifications are highlighted
-- And I can mark notifications as read
+- Filters include status, priority, source, and project
+- Clearing filters restores the complete result
+- No-results state explains how to reset the view
 
-**Technical Notes**:
+### US-4.4: Delete a Task Safely (5 SP)
 
-- Display notification badge with unread count
-- Implement notification dropdown/panel
-- Use WebSocket for real-time updates (future)
-
-**Tasks**:
-
-1. Implement notification API endpoints (Backend, 2 SP)
-2. Create notification bell component (Frontend, 2 SP)
-3. Create notification list component (Frontend, 2 SP)
-4. Implement notification state management (Frontend, 1 SP)
-5. Write tests (Backend + Frontend, 2 SP)
-
-**Dependencies**: US-5.1
-
----
-
-**US-5.3: Notification Preferences**
-
-- **As a** user,
-- **I want to** control my notification settings,
-- **So that** I receive only relevant notifications.
+- **As a** developer,
+- **I want to** delete a task with confirmation,
+- **So that** accidental removal is prevented.
 
 **Acceptance Criteria**:
 
-- Given I am in settings
-- When I toggle notification preferences
-- Then my preferences are saved
-- And notifications respect my settings
+- Confirmation identifies the task
+- Deletion does not delete the source note
+- List and kanban update consistently
 
-**Technical Notes**:
+## Epic 5: Source Connection and Consent
 
-- Store preferences in user model (JSON field)
-- Options: email enabled, deadline threshold (24h, 48h, 1week)
-- Implement notification filtering based on preferences
+**Priority**: Must Have (MVP)
+**Estimate**: 21 SP
 
-**Tasks**:
+### US-5.1: Connect a GitHub Repository (8 SP)
 
-1. Add preferences to User model (Backend, 1 SP)
-2. Implement preferences update API (Backend, 1 SP)
-3. Create notification settings UI (Frontend, 2 SP)
-4. Update notification service to respect preferences (Backend, 1 SP)
-5. Write tests (Backend + Frontend, 1 SP)
-
-**Dependencies**: US-5.2
-
----
-
-### Epic 6: Calendar View
-
-**Priority**: Should Have (Phase 2)  
-**Effort**: 21 story points  
-**Owner**: Frontend Engineer + Backend Engineer
-
-#### User Stories
-
-**US-6.1: Monthly Calendar View**
-
-- **As a** user,
-- **I want to** see my tasks on a monthly calendar,
-- **So that** I can visualize my schedule.
+- **As a** developer,
+- **I want to** connect a repository,
+- **So that** Workspace Flow can inspect the project I choose.
 
 **Acceptance Criteria**:
 
-- Given I am on the calendar page
-- When I select month view
-- Then I see a calendar with tasks displayed on their due dates
-- And I can click on a task to view details
+- Repository reference is validated
+- Scope and access are shown before consent
+- Credentials are never stored in project memory
 
-**Technical Notes**:
+### US-5.2: Approve and Revoke Local Source Access (8 SP)
 
-- Use react-big-calendar or similar library
-- Tasks are color-coded by project
-- Show task count on dates with multiple tasks
-
-**Tasks**:
-
-1. Implement calendar data API endpoint (Backend, 2 SP)
-2. Create calendar view component (Frontend, 3 SP)
-3. Implement task rendering on calendar (Frontend, 2 SP)
-4. Implement task click handler (Frontend, 1 SP)
-5. Write tests (Backend + Frontend, 2 SP)
-
-**Dependencies**: US-3.1
-
----
-
-**US-6.2: Weekly & Daily Calendar Views**
-
-- **As a** user,
-- **I want to** view my tasks in weekly and daily formats,
-- **So that** I can focus on near-term work.
+- **As a** developer,
+- **I want to** approve a local source scope,
+- **So that** analysis cannot read more than I intend.
 
 **Acceptance Criteria**:
 
-- Given I am on the calendar page
-- When I switch to week or day view
-- Then I see tasks for that time period
-- And I can navigate between weeks/days
+- Selected scope and timestamp are displayed
+- Revocation prevents new analysis runs
+- Existing findings remain attributable to their prior source
 
-**Technical Notes**:
+### US-5.3: View Consent and Source History (5 SP)
 
-- Reuse calendar component with different view props
-- Implement navigation controls
-- Ensure responsive layout for mobile
-
-**Tasks**:
-
-1. Implement week/day view rendering (Frontend, 2 SP)
-2. Add view switching controls (Frontend, 1 SP)
-3. Implement navigation (Frontend, 1 SP)
-4. Write tests (Frontend, 2 SP)
-
-**Dependencies**: US-6.1
-
----
-
-**US-6.3: Calendar Task Creation**
-
-- **As a** user,
-- **I want to** create tasks by clicking on a calendar date,
-- **So that** I can quickly schedule tasks.
+- **As a** developer,
+- **I want to** inspect source access history,
+- **So that** analysis is auditable.
 
 **Acceptance Criteria**:
 
-- Given I am viewing the calendar
-- When I click on a date
-- Then a task creation form opens with the due date pre-filled
-- And I can complete the form to create the task
+- Each run identifies source, consent, timestamp, and status
+- Revoked sources cannot be used silently
+- History is visible from project settings and diagnosis
 
-**Technical Notes**:
+## Epic 6: Diagnosis, Findings, and Score
 
-- Modal opens on date click
-- Due date is pre-filled from clicked date
-- Project selection is required
+**Priority**: Must Have (MVP)
+**Estimate**: 55 SP
 
-**Tasks**:
+### US-6.1: Start an Analysis Run (8 SP)
 
-1. Implement date click handler (Frontend, 1 SP)
-2. Create calendar task form (Frontend, 2 SP)
-3. Connect form to create task API (Frontend, 1 SP)
-4. Write tests (Frontend, 2 SP)
-
-**Dependencies**: US-6.1, US-3.1
-
----
-
-**US-6.4: Drag-and-Drop Task Rescheduling**
-
-- **As a** user,
-- **I want to** drag tasks to different dates on the calendar,
-- **So that** I can easily reschedule work.
+- **As a** developer,
+- **I want to** start diagnosis for a consented source,
+- **So that** I can understand project health.
 
 **Acceptance Criteria**:
 
-- Given I am viewing the calendar
-- When I drag a task to a different date
-- Then the task's due date is updated
-- And it appears on the new date
+- Run is queued, running, complete, or failed
+- Progress and read-only status are visible
+- A failed run can be retried without duplicating completed history
 
-**Technical Notes**:
+### US-6.2: Inventory the Repository (5 SP)
 
-- Implement drag-and-drop with react-dnd or calendar library feature
-- Update task due date via API
-- Show confirmation or undo option
-
-**Tasks**:
-
-1. Implement drag-and-drop handlers (Frontend, 3 SP)
-2. Connect to update task API (Frontend, 1 SP)
-3. Add visual feedback (Frontend, 1 SP)
-4. Write tests (Frontend, 2 SP)
-
-**Dependencies**: US-6.1, US-3.3
-
----
-
-### Epic 7: Third-Party Integrations
-
-**Priority**: Could Have (Phase 3)  
-**Effort**: 21 story points  
-**Owner**: Backend Engineer + Frontend Engineer
-
-#### User Stories
-
-**US-7.1: Google Calendar OAuth**
-
-- **As a** user,
-- **I want to** connect my Google account,
-- **So that** I can sync tasks with Google Calendar.
+- **As a** system,
+- **I want to** inventory languages, frameworks, modules, and entry points,
+- **So that** specialized agents receive reliable context.
 
 **Acceptance Criteria**:
 
-- Given I am in settings
-- When I click "Connect Google Calendar"
-- Then I am redirected to Google OAuth
-- And after authorization, my account is linked
-- And I return to the settings page
+- Inventory records evidence and source scope
+- Unsupported files are reported, not silently ignored
+- Inventory output is linked to the analysis run
 
-**Technical Notes**:
+### US-6.3: Run Specialized Diagnosis Agents (13 SP)
 
-- Implement OAuth 2.0 flow
-- Store access and refresh tokens securely (encrypted)
-- Handle token refresh automatically
-- Implement disconnect functionality
-
-**Tasks**:
-
-1. Set up Google Cloud project and OAuth credentials (Backend, 1 SP)
-2. Implement OAuth flow endpoints (Backend, 3 SP)
-3. Create token storage and refresh logic (Backend, 2 SP)
-4. Create Google Calendar connection UI (Frontend, 2 SP)
-5. Write tests (Backend + Frontend, 2 SP)
-
-**Dependencies**: US-1.2
-
----
-
-**US-7.2: Sync Tasks to Google Calendar**
-
-- **As a** user,
-- **I want to** automatically sync tasks with due dates to Google Calendar,
-- **So that** I have a unified view of my schedule.
+- **As a** system,
+- **I want to** run architecture, quality, and security agents,
+- **So that** diagnosis covers the dimensions that matter.
 
 **Acceptance Criteria**:
 
-- Given I have connected Google Calendar
-- When I create or update a task with a due date
-- Then a corresponding event is created/updated in Google Calendar
-- And changes sync within 5 minutes
+- Agents run with scoped inputs and correlation IDs
+- Each result includes evidence, severity, location, and recommendation
+- Partial failure is visible and does not erase prior runs
 
-**Technical Notes**:
+### US-6.4: Correlate Findings with Memory (8 SP)
 
-- Implement background sync job
-- Map task properties to calendar event properties
-- Handle API rate limits
-- Store mapping between tasks and calendar events
-
-**Tasks**:
-
-1. Implement Google Calendar API integration (Backend, 3 SP)
-2. Create sync service (Backend, 3 SP)
-3. Implement background sync job (Backend, 2 SP)
-4. Add sync status indicators (Frontend, 1 SP)
-5. Write tests (Backend + Frontend, 2 SP)
-
-**Dependencies**: US-7.1
-
----
-
-**US-7.3: Bidirectional Sync**
-
-- **As a** user,
-- **I want** changes in Google Calendar to reflect in TaskManager,
-- **So that** my tasks stay in sync regardless of where I make changes.
+- **As a** developer,
+- **I want to** see relevant decisions beside findings,
+- **So that** intentional trade-offs are not misread as defects.
 
 **Acceptance Criteria**:
 
-- Given I have syncing enabled
-- When I modify or delete a calendar event that was synced from a task
-- Then the corresponding task is updated or marked as complete
-- And changes appear in TaskManager
+- Correlation never silently removes evidence
+- Related decisions are linked from the finding
+- User can distinguish confirmed, contextualized, and unresolved findings
 
-**Technical Notes**:
+### US-6.5: Calculate an Explainable Score (8 SP)
 
-- Implement webhook listener for Google Calendar changes
-- Use push notifications (watch API)
-- Handle conflict resolution (last write wins or manual resolution)
-
-**Tasks**:
-
-1. Implement webhook endpoint (Backend, 2 SP)
-2. Register for calendar change notifications (Backend, 2 SP)
-3. Implement change processing (Backend, 3 SP)
-4. Handle conflict resolution (Backend, 2 SP)
-5. Write tests (Backend, 2 SP)
-
-**Dependencies**: US-7.2
-
----
-
-### Epic 8: User Experience Enhancements
-
-**Priority**: Should Have (Phase 1 & 3)  
-**Effort**: 16 story points  
-**Owner**: Frontend Engineer
-
-#### User Stories
-
-**US-8.1: Dark Mode**
-
-- **As a** user,
-- **I want to** toggle between light and dark themes,
-- **So that** I can use the app comfortably in different lighting conditions.
+- **As a** developer,
+- **I want to** understand how the score was calculated,
+- **So that** I can trust its prioritization signal.
 
 **Acceptance Criteria**:
 
-- Given I am logged in
-- When I toggle the theme switch
-- Then the entire UI changes to dark/light mode
-- And my preference is saved for future sessions
+- Score includes dimensions, weights, calculation version, and timestamp
+- Overall score is reproducible from validated findings
+- Score change links to contributing findings
 
-**Technical Notes**:
+### US-6.6: Review Findings and Recommendations (8 SP)
 
-- Use CSS variables or styled-components theming
-- Store preference in user settings
-- Apply theme on app load
-- Ensure all components support both themes
-
-**Tasks**:
-
-1. Define theme variables (Frontend, 1 SP)
-2. Implement theme provider and context (Frontend, 2 SP)
-3. Update all components to use theme variables (Frontend, 3 SP)
-4. Add theme toggle control (Frontend, 1 SP)
-5. Persist theme preference (Frontend, 1 SP)
-6. Write tests (Frontend, 1 SP)
-
-**Dependencies**: US-1.2
-
----
-
-**US-8.2: Localization (i18n)**
-
-- **As a** user,
-- **I want to** use the app in my preferred language,
-- **So that** I can understand the interface better.
+- **As a** developer,
+- **I want to** review prioritized findings,
+- **So that** I know what to address next.
 
 **Acceptance Criteria**:
 
-- Given I am in settings
-- When I select a language (English or Spanish)
-- Then all UI text changes to that language
-- And my preference is saved
+- Findings are filterable by dimension and severity
+- Evidence and location are visible before recommendation
+- Finding detail works on desktop and mobile
 
-**Technical Notes**:
+### US-6.7: Compare Project Health Trends (5 SP)
 
-- Use react-i18next or similar library
-- Extract all strings to translation files
-- Support EN and ES initially
-- Structure for easy addition of more languages
-
-**Tasks**:
-
-1. Set up i18n library and configuration (Frontend, 1 SP)
-2. Create translation files (Frontend, 2 SP)
-3. Replace hardcoded strings with translation keys (Frontend, 3 SP)
-4. Add language selector (Frontend, 1 SP)
-5. Persist language preference (Frontend, 1 SP)
-6. Write tests (Frontend, 1 SP)
-
-**Dependencies**: US-1.2
-
----
-
-**US-8.3: SEO Optimization**
-
-- **As a** potential user,
-- **I want to** discover the app through search engines,
-- **So that** I can learn about its features.
+- **As a** developer,
+- **I want to** compare scores across projects and runs,
+- **So that** I can prioritize limited time.
 
 **Acceptance Criteria**:
 
-- Given the app is deployed
-- When I search for task management tools
-- Then the TaskManager app appears in search results
-- And the landing page has proper meta tags and structured data
+- Trend compares completed runs only
+- Missing or failed runs are clearly represented
+- Portfolio links to the diagnosis responsible for the change
 
-**Technical Notes**:
+## MVP Estimate Summary
 
-- Implement server-side rendering or static generation for landing page
-- Add meta tags for title, description, Open Graph, Twitter Cards
-- Implement robots.txt and sitemap.xml
-- Ensure proper heading hierarchy
-- Optimize images and load times
-
-**Tasks**:
-
-1. Create SEO-optimized landing page (Frontend, 2 SP)
-2. Add meta tags and structured data (Frontend, 1 SP)
-3. Generate sitemap and robots.txt (Frontend, 1 SP)
-4. Optimize performance (Frontend, 1 SP)
-5. Validate with Google Search Console (Frontend, 1 SP)
-
-**Dependencies**: None (independent feature)
+| Epic | Story Points |
+| ---- | ------------ |
+| Epic 0: Foundation | 26 |
+| Epic 1: Identity | 21 |
+| Epic 2: Project Workspace | 26 |
+| Epic 3: Memory and AI Enrichment | 34 |
+| Epic 4: Contextual Work | 26 |
+| Epic 5: Source and Consent | 21 |
+| Epic 6: Diagnosis and Score | 55 |
+| **Total** | **209 SP** |
 
 ---

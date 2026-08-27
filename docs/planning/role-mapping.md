@@ -1,246 +1,127 @@
-# Role-to-Task Mapping
+# Workspace Flow Role-to-Task Mapping
 
 ## Tech Lead Responsibilities
 
 **Architecture & Planning** (Ongoing)
 
-- Define and document system architecture
-- Review and approve technical design decisions
+- Define the Workspace Flow domain and enforce its product boundaries
+- Review project memory, consent, diagnosis, and scoring decisions
 - Ensure adherence to Clean Architecture and DDD principles
-- Conduct code reviews for critical components
-- Identify and mitigate technical risks
+- Own API contracts, source-access threat modeling, and release readiness
+- Conduct architecture reviews and mitigate technical risks
 
 **Key Tasks**:
 
-1. Set up project structure and architecture (Week 1, 3 SP)
-2. Define API contracts and data models (Week 1, 3 SP)
-3. Set up development environment and tooling (Week 1, 2 SP)
-4. Establish coding standards and CI/CD pipeline (Week 1-2, 3 SP)
-5. Conduct weekly architecture reviews (Ongoing)
-6. Mentor team on Clean Architecture implementation (Ongoing)
-7. Review critical pull requests (Ongoing)
+1. Define domain and API contracts for projects, notes, tasks, sources, runs, findings, and scores
+2. Establish the read-only analysis boundary and consent audit model
+3. Coordinate mockup-to-screen decisions for the root `docs/*.png` assets
+4. Set up CI, migrations, observability, and production safeguards
+5. Review critical pull requests and acceptance evidence
 
-**Epic Ownership**: Shared oversight of all epics
+**Epic Ownership**: Shared oversight of all Workspace Flow epics
 
 ---
 
 ### Backend Engineer Responsibilities
 
-**Primary Focus**: API development, database design, business logic
+**Primary Focus**: API development, persistence, business rules, and analysis orchestration
 
 **Key Tasks by Epic**:
 
-**Epic 1: User Authentication** (21 SP)
+**Epic 1: Identity and Ownership**
 
-- Implement User domain model and repository
-- Create authentication service with JWT
-- Build registration, login, and password reset endpoints
-- Set up password hashing and security measures
-- Write unit and integration tests
+- Implement user authentication and project ownership checks
+- Build session expiration and account-management endpoints
+- Write authorization and security tests
 
-**Epic 2: Project Management** (7 SP)
+**Epic 2: Project Workspace**
 
-- Implement Project domain model and repository
-- Create CRUD API endpoints for projects
-- Write tests for project operations
+- Implement project and source domain models
+- Create project CRUD, archive, deletion, and source-connection endpoints
+- Enforce confirmation and cascade rules
 
-**Epic 3: Task Management** (10 SP)
+**Epic 3: Memory and Contextual Work**
 
-- Implement Task domain model and repository
-- Create CRUD API endpoints for tasks
-- Implement task status updates and filtering
-- Write tests for task operations
+- Implement notes, architecture decisions, and AI suggestion persistence
+- Implement contextual tasks and `source_note_id` traceability
+- Add search, filtering, and status transitions
 
-**Epic 4: Dashboard** (3 SP)
+**Epic 4: Diagnosis and Reporting**
 
-- Implement dashboard statistics API
-- Optimize aggregate queries
-- Write tests
+- Implement analysis-run orchestration and read-only source adapters
+- Persist immutable findings and score calculations
+- Expose evidence, recommendations, trends, and failure recovery
 
-**Epic 5: Notifications** (13 SP)
-
-- Create Notification domain model
-- Implement notification generation service
-- Set up scheduled jobs
-- Integrate email service
-- Create notification API endpoints
-- Write tests
-
-**Epic 7: Google Calendar Integration** (13 SP)
-
-- Implement OAuth flow
-- Integrate Google Calendar API
-- Create sync service
-- Implement webhook handling
-- Write tests
-
-**Total Estimated Effort**: ~67 story points across all phases
+**Total Estimated Effort**: 109 SP across foundation, identity, memory, contextual work, and diagnosis backend stories
 
 ---
 
 ### Frontend Engineer Responsibilities
 
-**Primary Focus**: UI/UX implementation, state management, responsive design
+**Primary Focus**: Workspace UX implementation, state management, responsive design, and accessibility
 
 **Key Tasks by Epic**:
 
-**Epic 1: User Authentication** (10 SP)
+**Epic 1: Identity and Application Shell**
 
-- Create registration and login forms
-- Implement authentication state management
-- Create protected route wrapper
-- Write component tests
+- Create registration, login, session, and protected-route flows
+- Implement authenticated navigation and account states
 
-**Epic 2: Project Management** (8 SP)
+**Epic 2: Project Workspace**
 
-- Create project list and form components
-- Implement project navigation
-- Create edit and delete UI
-- Write component tests
+- Create project portfolio, create/edit, detail, archive, and delete flows
+- Implement source connection and consent states
 
-**Epic 3: Task Management** (14 SP)
+**Epic 3: Memory and Contextual Work**
 
-- Create task form and list components
-- Implement drag-and-drop functionality
-- Create task detail view
-- Implement filtering UI
-- Write component tests
+- Create note capture, history, decision, and suggestion-review interfaces
+- Implement contextual task cards, kanban, list, search, and filters
 
-**Epic 4: Dashboard & Kanban** (13 SP)
+**Epic 4: Diagnosis and Reporting**
 
-- Create dashboard layout and components
-- Build kanban board with drag-and-drop
-- Implement search functionality
-- Write component tests
+- Create analysis controls, progress, error, and result views
+- Visualize score dimensions, trends, findings, evidence, and recommendations
+- Add cross-project prioritization to the dashboard
 
-**Epic 5: Notifications** (8 SP)
-
-- Create notification bell and list components
-- Implement notification state management
-- Create notification settings UI
-- Write component tests
-
-**Epic 6: Calendar View** (15 SP)
-
-- Create calendar view component
-- Implement week/day views
-- Add calendar task creation
-- Implement drag-and-drop rescheduling
-- Write component tests
-
-**Epic 7: Google Calendar Integration** (5 SP)
-
-- Create Google Calendar connection UI
-- Add sync status indicators
-- Write component tests
-
-**Epic 8: UX Enhancements** (16 SP)
-
-- Implement dark mode
-- Add localization support
-- Create SEO-optimized landing page
-- Write tests
-
-**Total Estimated Effort**: ~89 story points across all phases
+**Total Estimated Effort**: 81 SP across foundation, workspace, memory, contextual work, and diagnosis frontend stories
 
 ---
 
 ### UI/UX Engineer Responsibilities
 
-**Primary Focus**: Design system, prototyping, user research, accessibility
+**Primary Focus**: Workspace Flow design system, prototypes, research, and accessibility
 
 **Key Tasks by Epic**:
 
-**Epic 0: Design System & Prototyping Setup** (13 SP)
+**Epic 0: Design System and Mockup Alignment**
 
-- Define core design system (colors, typography, spacing)
-- Set up Stitch AI project and create project structure
-- Create custom Ant Design theme configuration
-- Document component library and design patterns
-- Plan user research activities
-- Create accessibility audit plan
+- Maintain tokens, component patterns, and responsive behavior
+- Annotate the root `docs/*.png` mockups and map them to product flows
+- Define empty, loading, error, consent, and confirmation states
 
-**Epic 1: User Authentication UI/UX** (8 SP)
+**Epic 1: Workspace Memory Design**
 
-- Design registration, login, and password reset flows
-- Design user profile and settings pages
-- Create interactive prototypes in Stitch AI
-- Conduct usability testing
+- Design project portfolio, project detail, note capture, and decision history
+- Design AI suggestion review with clear user control
 
-**Epic 2: Project Management UI/UX** (8 SP)
+**Epic 2: Diagnosis Design**
 
-- Design projects list view (card and list layouts)
-- Design project creation and editing forms
-- Design project detail view with task integration
-- Create interactive prototype for project management
+- Design source consent, analysis progress, score, trend, and finding detail states
+- Make evidence and recommendation hierarchy easy to scan
 
-**Epic 3: Task Management UI/UX** (13 SP)
+**Epic 3: Accessibility and Usability**
 
-- Design task card component with priority indicators
-- Design kanban board layout with drag-and-drop
-- Design task creation and detail forms
-- Design task filtering and search interfaces
-- Create interactive prototype for task management
-
-**Epic 4: Dashboard UI/UX** (8 SP)
-
-- Design dashboard layout with widget-based approach
-- Design statistics and metrics displays
-- Design upcoming and overdue tasks widgets
-- Create interactive dashboard prototype
-
-**Epic 5: Notifications UI/UX** (5 SP)
-
-- Design notification bell and dropdown
-- Design full notifications page
-- Design notification preference settings
-
-**Epic 6: Calendar View UI/UX** (8 SP)
-
-- Design calendar layout (month, week, day views)
-- Design task rendering on calendar
-- Design calendar interactions (drag-and-drop, creation)
-- Create interactive calendar prototype
-
-**Epic 7: Responsive & Mobile Design** (8 SP)
-
-- Design mobile navigation patterns
-- Design mobile-specific layouts for all features
-- Design tablet-optimized layouts
-- Document responsive behavior
-
-**Epic 8: Accessibility & Usability** (5 SP)
-
-- Design keyboard navigation patterns
-- Specify screen reader support requirements
-- Conduct accessibility testing and compliance verification
-
-**Epic 9: Design Handoff & Developer Support** (8 SP)
-
-- Create detailed design specifications
-- Prepare and export design assets
-- Document component behavior and animations
-- Collaborate with developers during implementation
-- Conduct design QA on implemented features
-
-**Total Estimated Effort**: ~84 story points across all phases
+- Validate keyboard navigation, semantic structure, contrast, and mobile layouts
+- Conduct usability sessions with multi-project developers and technical leads
 
 **Key Deliverables**:
 
-- Comprehensive design system documentation
-- Interactive prototypes in [Stitch AI](https://stitch.withgoogle.com/)
-- High-fidelity mockups for all screens
-- Component library with usage guidelines
-- Design specifications and assets for handoff
-- User research findings and usability test reports
-- Accessibility documentation (ARIA labels, keyboard patterns)
+- Workspace Flow design system and annotated mockup inventory
+- Responsive screens for MVP journeys
+- Usability findings and accessibility audit
+- Developer handoff specifications
 
-**Tools & Technologies**:
-
-- **Prototyping**: Stitch AI platform
-- **Component Library**: Ant Design
-- **Accessibility Testing**: axe DevTools, WAVE, Lighthouse
-- **Collaboration**: GitHub (PR reviews), Slack/Teams
+**Total Estimated Effort**: 24 SP across design foundation, memory, diagnosis, validation, and handoff stories
 
 ---
 
@@ -248,12 +129,10 @@
 
 **Tech Lead + Backend + Frontend + UI/UX** (Collaborative)
 
-- Initial project setup and architecture definition
-- API contract definition and documentation
-- Integration testing
-- Performance optimization
-- Security review and hardening
-- Production deployment
-- Post-launch monitoring and bug fixes
+- Review product boundaries and MVP acceptance criteria
+- Maintain API and screen contracts
+- Test consent, ownership, traceability, and read-only behavior
+- Verify root mockups against implemented flows
+- Monitor quality, privacy, performance, and post-release feedback
 
 ---
