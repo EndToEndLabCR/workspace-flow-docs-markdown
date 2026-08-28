@@ -14,12 +14,22 @@
 
 - **Authentication**: JWT with 24-hour expiration, refresh tokens
 - **Password Policy**: Min 8 characters, complexity requirements
-- **Data Encryption**: HTTPS/TLS for all communications
+- **Data Encryption**: 
+  - HTTPS/TLS for all communications
+  - API keys encrypted at rest using industry-standard encryption (e.g., AES-256)
 - **SQL Injection Prevention**: ORM with parameterized queries
 - **XSS Prevention**: Input sanitization, Content Security Policy
 - **CSRF Protection**: CSRF tokens for state-changing operations
 - **Rate Limiting**: Max 100 requests/minute per user
-- **Data Privacy**: GDPR compliance considerations
+- **Data Privacy**: 
+  - GDPR compliance considerations
+  - No source code retention after analysis (findings only)
+  - User-controlled API keys (BYOK model)
+  - API keys never logged or transmitted to analytics
+- **Source Code Access**:
+  - Explicit user consent via File System Access API
+  - Browser-native permission model
+  - Configurable exclusion patterns (secrets, dependencies, build artifacts)
 
 ## NFR-3: Scalability
 
@@ -29,6 +39,10 @@
 - **CDN**: Static assets served via CDN
 - **Load Balancing**: Nginx or cloud load balancer
 - **Database Sharding**: Strategy for 100k+ users (future)
+- **AI Provider Scaling**: 
+  - User BYOK model eliminates AI service bottleneck
+  - Analysis runs queued and executed asynchronously
+  - Configurable timeout and retry policies per provider
 
 ## NFR-4: Reliability & Availability
 
@@ -38,8 +52,22 @@
 - **Monitoring**: Health checks every 60 seconds
 - **Error Tracking**: Sentry or similar for error reporting
 - **Logging**: Structured logging with correlation IDs
+- **Analysis Resilience**:
+  - Graceful degradation when AI provider unavailable
+  - Memory and task features remain functional without analysis
+  - Retry mechanism with exponential backoff for failed analyses
+  - Clear error messages for API key or quota issues
 
-## NFR-5: Observability
+## NFR-5: Agent Safety and Execution
+
+- **Orchestration**: LangGraph manages explicit agent states, ordering, checkpoints, and retry paths
+- **Repository Inventory**: Tree-sitter parses only files within the user's approved source scope
+- **Typed Contracts**: Pydantic validates every agent input, output, finding, and score calculation
+- **Read-Only Tools**: Agents may list, read, parse, and inspect metadata; no write, commit, or patch tool is exposed
+- **Traceability**: Every agent step includes analysis run ID and correlation ID
+- **Privacy**: Agent traces contain metadata only and never persist source code or code snippets
+
+## NFR-6: Observability
 
 - **Logging**: Centralized logging (ELK stack or cloud equivalent)
 - **Metrics**: Prometheus + Grafana for system metrics
@@ -47,7 +75,7 @@
 - **Alerting**: PagerDuty or equivalent for critical issues
 - **Dashboards**: Real-time monitoring of KPIs
 
-## NFR-6: Maintainability
+## NFR-7: Maintainability
 
 - **Code Coverage**: Minimum 80% for backend, 70% for frontend
 - **Documentation**: OpenAPI/Swagger for all API endpoints
@@ -55,12 +83,17 @@
 - **CI/CD**: Automated testing and deployment pipeline
 - **Code Review**: Mandatory PR reviews before merge
 
-## NFR-7: Usability
+## NFR-8: Usability
 
 - **Accessibility**: WCAG 2.1 Level AA compliance
-- **Browser Support**: Latest 2 versions of Chrome, Firefox, Safari, Edge
-- **Mobile Support**: iOS 14+, Android 10+
+- **Browser Support**: 
+  - Latest 2 versions of Chrome, Firefox, Safari, Edge
+  - File System Access API compatibility check on load
+- **Mobile Support**: iOS 14+, Android 10+ (responsive design)
 - **Internationalization**: Support for RTL languages (future)
-- **Help Documentation**: In-app help tooltips and user guide
+- **Help Documentation**: 
+  - In-app help tooltips and user guide
+  - AI provider setup wizard with clear instructions
+  - Example API key configuration for Gemini and Groq
 
 ---

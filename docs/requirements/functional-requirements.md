@@ -1,78 +1,76 @@
-# Functional Requirements (FRs)
+# Workspace Flow Functional Requirements (FRs)
 
 ## FR-1: User Authentication & Authorization
 
-- Users can register with email and password
-- Users can log in and receive JWT token
-- Passwords must be securely hashed (bcrypt)
-- Session management with token expiration
-- Password reset via email
-- Email verification for new accounts
+- Users can register, sign in, sign out, and manage their account
+- Sessions expire securely and authentication errors are actionable
+- Users can access only their own projects and project-owned records
 
-## FR-2: Project Management
+## FR-2: Project Workspace
 
-- Users can create projects with name, description, and color
-- Users can view all their projects in a list
-- Users can update project details
-- Users can archive/unarchive projects
-- Users can delete projects (with confirmation)
-- Deleted projects should cascade delete associated tasks
+- Users can create, view, edit, archive, and delete projects
+- Projects store purpose and one active GitHub or local source reference
+- Deletion requires confirmation and removes owned memory, tasks, and analysis history
+- Project detail presents memory, contextual work, latest diagnosis, and next actions
 
-## FR-3: Task Management
+## FR-3: Project Memory
 
-- Users can create tasks within projects
-- Tasks must have: title, optional description, status, optional due date
-- Users can update task details
-- Users can change task status (drag-and-drop on kanban)
-- Users can set task priority
-- Users can delete tasks
-- Tasks can be reordered within status columns
+- Users can capture free-form notes linked to a project
+- Users can preserve note history and record architecture decisions with rationale
+- AI may classify notes and propose a task or decision
+- Users must accept, edit, or discard every AI suggestion
 
-## FR-4: Dashboard & Visualization
+## FR-4: Contextual Task Management
 
-- Display task summary by status (counts)
-- Show upcoming tasks (next 7 days)
-- Display overdue tasks prominently
-- Kanban board view with drag-and-drop
-- Filter tasks by project, priority, status
-- Search tasks by title or description
+- Users can create, update, prioritize, complete, and delete project tasks
+- Tasks created from notes preserve `source_note_id`
+- Users can view tasks in kanban and list layouts and filter or search them
 
-## FR-5: Notifications
+## FR-5: Source Connection & Consent
 
-- System generates notifications for tasks due within 24 hours
-- System generates notifications for overdue tasks
-- Users can view notification history
-- Users can mark notifications as read
-- Email notifications (configurable in user preferences)
-- In-app notification badge/indicator
+- Users can connect one GitHub repository or approved local source per project
+- The interface explains what will be read and requests explicit consent
+- Users can revoke access and see the source used by each analysis run
 
-## FR-6: Calendar View
+## FR-6: AI Provider Configuration
 
-- Display tasks on calendar by due date
-- Monthly, weekly, and daily views
-- Click on date to create task with pre-filled due date
-- Click on task to view/edit details
-- Color-code tasks by project
+- Users can configure a supported AI provider using their own API key (BYOK)
+- Gemini is the default provider and Groq is the initial alternative
+- Users can select a provider and optional model for note enrichment or diagnosis
+- API keys are encrypted at rest when stored and are never logged or sent to analytics
+- Provider failures expose a retryable state and do not prevent raw note capture
 
-## FR-7: Third-Party Integration
+## FR-7: Read-Only Project Diagnosis
 
-- Google Calendar integration for syncing tasks
-- OAuth flow for Google authentication
-- Sync task due dates to Google Calendar events
-- Option to enable/disable sync in settings
+- Users can start analysis for a connected, consented source
+- Agents inspect source content without modifying files
+- Each run stores timestamp, source, status, result, and recoverable failures
 
-## FR-8: Responsive Design
+## FR-8: Findings & Explainable Health Score
 
-- Mobile-responsive layout (320px+)
-- Touch-optimized controls for mobile
-- Consistent experience across devices
-- Progressive Web App (PWA) capabilities
+- Findings include dimension, severity, evidence or location, and recommendation
+- Users can inspect findings by dimension and severity
+- Scores use documented weights and expose the cause of score changes
+- Findings can reference relevant architecture decisions
 
-## FR-9: Additional Features
+## FR-9: Portfolio Dashboard
 
-- Dark mode toggle (persisted in preferences)
-- Multi-language support (EN, ES initially)
-- SEO-optimized landing/marketing pages
-- User settings/preferences management
+- Dashboard shows projects, latest score, trend, open tasks, and recent activity
+- Users can prioritize projects by health, trend, or activity
+- Empty, loading, failure, and first-use states are supported
+
+## FR-10: Responsive & Accessible Experience
+
+- Core authentication, project, memory, task, consent, and diagnosis flows work on desktop and mobile
+- Controls support keyboard navigation and assistive technology
+- Loading, validation, error, success, and confirmation states are visible
+- The experience follows the root `docs/*.png` mockups
+- Local-source access uses File System Access API permission controls where supported
+
+## Out of Scope for MVP
+
+- Real-time collaboration, shared projects, roles, and team permissions
+- Agent-generated commits, patches, or automatic code changes
+- Calendar synchronization, deadline notifications, and broad integrations
 
 ---

@@ -1,8 +1,8 @@
-# TaskManager Backend Project
+# Workspace Flow Backend Project
 
 ## Overview
 
-This directory will contain the backend application for the TaskManager project. The backend is an independent project that provides a RESTful API for managing tasks, projects, users, and integrations.
+This directory will contain the backend application for the Workspace Flow project. The backend is an independent project that provides a RESTful API for project memory, contextual tasks, source consent, read-only diagnosis, findings, and health scores.
 
 ## Tech Stack
 
@@ -26,6 +26,13 @@ The backend follows **Clean Architecture** with **Domain-Driven Design** (DDD) p
 2. **Application Layer**: Use cases and orchestration
 3. **Infrastructure Layer**: Technical implementations
 4. **Presentation Layer**: API endpoints and request handling
+
+### Workspace Flow Boundaries
+
+- Enforce one-owner access for every project-owned record
+- Preserve raw notes and `source_note_id` relationships
+- Require explicit source consent before analysis
+- Keep analysis agents read-only and persist immutable findings
 
 ### SOLID Principles
 
@@ -73,4 +80,4 @@ _This section will be populated with the reference to the backend project when i
 
 ---
 
-**Last Updated**: November 11, 2025
+**Last Updated**: August 26, 2026

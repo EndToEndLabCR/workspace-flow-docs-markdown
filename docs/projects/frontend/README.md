@@ -1,8 +1,8 @@
-# TaskManager Frontend Project
+# Workspace Flow Frontend Project
 
 ## Overview
 
-This directory will contain the frontend application for the TaskManager project. The frontend is an independent React-based web application that provides a user-friendly interface for task and project management.
+This directory will contain the frontend application for the Workspace Flow project. The frontend is an independent React-based web application for project memory, contextual work, read-only diagnosis, and explainable project health.
 
 ## Tech Stack
 
@@ -23,6 +23,13 @@ The frontend follows a **feature-based architecture** with clear separation of c
 ## Development Guidelines
 
 ### Best Practices
+
+#### Workspace Flow Features
+
+- Keep project, memory, task, source-consent, and diagnosis views separate by feature
+- Make AI suggestions reviewable with accept, edit, and discard states
+- Make score changes traceable to findings and visible evidence
+- Represent analysis progress, failure, retry, and read-only status clearly
 
 #### React Components
 
@@ -103,7 +110,7 @@ _This section will be populated with the reference to the frontend project when 
 
 - Use Ant Design components for consistency
 - Customize theme via ConfigProvider
-- Implement dark mode support
+- Support the documented Workspace Flow visual states and theme tokens
 - Ensure responsive design for all components
 
 ### User Interactions
@@ -129,4 +136,4 @@ _This section will be populated with the reference to the frontend project when 
 
 ---
 
-**Last Updated**: November 11, 2025
+**Last Updated**: August 26, 2026
